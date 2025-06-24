@@ -75,6 +75,10 @@ export class TestRunner extends BaseRunner {
     }
   }
 
+  protected override async internalStop(): Promise<void> {
+    // we just override this to do nothing, this will be called when timed out
+  }
+
   protected override async internalRelease(): Promise<void> {
     await this._runAfterEachHooksInPath()
   }
