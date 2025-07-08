@@ -390,7 +390,7 @@ export class TestsRunner extends BaseRunner<TestsRunnerEventMap> {
       return
     }
 
-    const someTestRunnersAreFailedOrErrored = testRunners.some((test) => test.isFailed || test.isError)
+    const someTestRunnersAreFailedOrErrored = testRunners.some((test) => test.isFailed || test.isError || test.isTimedOut)
     const someChildrenAreFailed = children.some((child) => child.status === TestStatus.Failed)
 
     if (someTestRunnersAreFailedOrErrored || someChildrenAreFailed) {
