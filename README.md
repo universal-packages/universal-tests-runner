@@ -1362,6 +1362,8 @@ interface NodeState {
   options: DescribeOptions // Options for this describe block
   tests: TestRunnerState[] // Tests directly in this node
   children: NodeState[] // Child describe blocks
+  beforeHooksErrors: Error[] // Errors from before hooks
+  afterHooksErrors: Error[] // Errors from after hooks
 }
 
 interface TestRunnerState {

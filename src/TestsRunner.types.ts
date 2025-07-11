@@ -49,6 +49,8 @@ export interface NodeState {
   name: string | symbol
   options: DescribeOptions
   tests: TestRunnerState[]
+  beforeHooksErrors: Error[]
+  afterHooksErrors: Error[]
   children: NodeState[]
 }
 

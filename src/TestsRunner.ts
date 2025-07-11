@@ -365,7 +365,9 @@ export class TestsRunner extends BaseRunner<TestsRunnerEventMap> {
       options: node.options,
       tests: node.testRunners.map((test) => test.state),
       children: node.children.map((child) => this._generateNodeState(child)),
-      status: node.status
+      status: node.status,
+      beforeHooksErrors: node.beforeHooksErrors,
+      afterHooksErrors: node.afterHooksErrors
     }
   }
 
