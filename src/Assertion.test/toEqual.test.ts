@@ -55,8 +55,17 @@ export async function toEqualTest() {
       await testsRunner.run()
 
       const error = testsRunner.state.tests[0].failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected objects to be equal, but they were not')
-      selfTestsRunner.expect(error.messageLocals).toEqual({})
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to equal {{target}}')
+      selfTestsRunner.expect(error.messageLocals).toEqual({
+        target: {
+          type: 'instanceOf',
+          representation: 'Object'
+        },
+        actual: {
+          type: 'instanceOf',
+          representation: 'Object'
+        }
+      })
       selfTestsRunner.expect(error.difference).toBeDefined()
       selfTestsRunner.expect(error.difference?.type).toBe('object')
     })
@@ -71,8 +80,17 @@ export async function toEqualTest() {
       await testsRunner.run()
 
       const error = testsRunner.state.tests[0].failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected arrays to be equal, but they were not')
-      selfTestsRunner.expect(error.messageLocals).toEqual({})
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to equal {{target}}')
+      selfTestsRunner.expect(error.messageLocals).toEqual({
+        target: {
+          type: 'array',
+          representation: '[Array]'
+        },
+        actual: {
+          type: 'array',
+          representation: '[Array]'
+        }
+      })
       selfTestsRunner.expect(error.difference).toBeDefined()
       selfTestsRunner.expect(error.difference?.type).toBe('array')
     })
@@ -87,10 +105,16 @@ export async function toEqualTest() {
       await testsRunner.run()
 
       const error = testsRunner.state.tests[0].failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected {{expected}} to equal {{actual}}')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to equal {{target}}')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        expected: '43',
-        actual: '42'
+        target: {
+          type: 'number',
+          representation: '43'
+        },
+        actual: {
+          type: 'number',
+          representation: '42'
+        }
       })
     })
 
@@ -117,10 +141,16 @@ export async function toEqualTest() {
       await testsRunner.run()
 
       const error = testsRunner.state.tests[0].failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected {{expected}} not to equal {{actual}}, but it did')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} not to equal {{target}}, but it did')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        expected: 'Object',
-        actual: 'Object'
+        target: {
+          type: 'instanceOf',
+          representation: 'Object'
+        },
+        actual: {
+          type: 'instanceOf',
+          representation: 'Object'
+        }
       })
     })
 

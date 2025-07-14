@@ -34,13 +34,17 @@ export async function toBeGreaterThanTest() {
 
       selfTestsRunner.expect(testsRunner.isFailed).toBe(true)
       const error = testsRunner.state.tests[0].failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to be greater than {{expected}}, but it was not')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to be greater than {{target}}')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        expected: '5',
-        actual: '3'
+        target: {
+          type: 'number',
+          representation: '5'
+        },
+        actual: {
+          type: 'number',
+          representation: '3'
+        }
       })
-      selfTestsRunner.expect(error.expected).toBe(5)
-      selfTestsRunner.expect(error.actual).toBe(3)
     })
 
     selfTestsRunner.test('Should fail when values are equal', async () => {
@@ -53,10 +57,16 @@ export async function toBeGreaterThanTest() {
       await testsRunner.run()
 
       const error = testsRunner.state.tests[0].failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to be greater than {{expected}}, but it was not')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to be greater than {{target}}')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        expected: '5',
-        actual: '5'
+        target: {
+          type: 'number',
+          representation: '5'
+        },
+        actual: {
+          type: 'number',
+          representation: '5'
+        }
       })
     })
 
@@ -70,19 +80,28 @@ export async function toBeGreaterThanTest() {
       await testsRunner.run()
 
       const error = testsRunner.state.tests[0].failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected a number, but got {{actual}}')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to be a number')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        actual: 'hello'
+        actual: {
+          type: 'string',
+          representation: "'hello'"
+        }
       })
-      selfTestsRunner.expect(error.expected).toBe('number')
-      selfTestsRunner.expect(error.actual).toBe('hello')
     })
 
     selfTestsRunner.test('Should handle different non-number types', async () => {
       const testsRunner = new TestsRunner()
 
+      testsRunner.test('String test', async () => {
+        testsRunner.expect('hello').toBeGreaterThan(5)
+      })
+
       testsRunner.test('Null test', async () => {
         testsRunner.expect(null).toBeGreaterThan(5)
+      })
+
+      testsRunner.test('Undefined test', async () => {
+        testsRunner.expect(undefined).toBeGreaterThan(5)
       })
 
       testsRunner.test('Object test', async () => {
@@ -97,17 +116,40 @@ export async function toBeGreaterThanTest() {
 
       const tests = testsRunner.state.tests
 
+      // String test
+      const stringError = tests[0].failureReason as TestError
+      selfTestsRunner.expect(stringError.messageLocals.actual).toEqual({
+        type: 'string',
+        representation: "'hello'"
+      })
+
       // Null test
-      const nullError = tests[0].failureReason as TestError
-      selfTestsRunner.expect(nullError.messageLocals.actual).toBe('null')
+      const nullError = tests[1].failureReason as TestError
+      selfTestsRunner.expect(nullError.messageLocals.actual).toEqual({
+        type: 'null',
+        representation: 'null'
+      })
+
+      // Undefined test
+      const undefinedError = tests[2].failureReason as TestError
+      selfTestsRunner.expect(undefinedError.messageLocals.actual).toEqual({
+        type: 'undefined',
+        representation: 'undefined'
+      })
 
       // Object test
-      const objectError = tests[1].failureReason as TestError
-      selfTestsRunner.expect(objectError.messageLocals.actual).toBe('Object')
+      const objectError = tests[3].failureReason as TestError
+      selfTestsRunner.expect(objectError.messageLocals.actual).toEqual({
+        type: 'instanceOf',
+        representation: 'Object'
+      })
 
       // Array test
-      const arrayError = tests[2].failureReason as TestError
-      selfTestsRunner.expect(arrayError.messageLocals.actual).toBe('Array')
+      const arrayError = tests[4].failureReason as TestError
+      selfTestsRunner.expect(arrayError.messageLocals.actual).toEqual({
+        type: 'array',
+        representation: '[Array]'
+      })
     })
 
     selfTestsRunner.test('Should work with not.toBeGreaterThan for successful negation', async () => {
@@ -134,13 +176,17 @@ export async function toBeGreaterThanTest() {
       await testsRunner.run()
 
       const error = testsRunner.state.tests[0].failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} not to be greater than {{expected}}, but it was')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} not to be greater than {{target}}, but it was')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        expected: '5',
-        actual: '10'
+        target: {
+          type: 'number',
+          representation: '5'
+        },
+        actual: {
+          type: 'number',
+          representation: '10'
+        }
       })
-      selfTestsRunner.expect(error.expected).toBe(5)
-      selfTestsRunner.expect(error.actual).toBe(10)
     })
 
     selfTestsRunner.test('Should handle edge cases with infinity and zero', async () => {

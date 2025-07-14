@@ -52,13 +52,17 @@ export async function toContainTest() {
 
       selfTestsRunner.expect(testsRunner.isFailed).toBe(true)
       const error = testsRunner.state.tests[0].failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to contain {{expected}}, but it did not')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to contain {{target}}')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        expected: '4',
-        actual: 'Array'
+        target: {
+          type: 'number',
+          representation: '4'
+        },
+        actual: {
+          type: 'array',
+          representation: '[Array]'
+        }
       })
-      selfTestsRunner.expect(error.expected).toBe(4)
-      selfTestsRunner.expect(error.actual).toEqual([1, 2, 3])
     })
 
     selfTestsRunner.test('Should fail when string does not contain expected substring', async () => {
@@ -71,10 +75,16 @@ export async function toContainTest() {
       await testsRunner.run()
 
       const error = testsRunner.state.tests[0].failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to contain {{expected}}, but it did not')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to contain {{target}}')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        expected: 'xyz',
-        actual: 'hello world'
+        target: {
+          type: 'string',
+          representation: "'xyz'"
+        },
+        actual: {
+          type: 'string',
+          representation: "'hello world'"
+        }
       })
     })
 
@@ -103,12 +113,13 @@ export async function toContainTest() {
       await testsRunner.run()
 
       const error = testsRunner.state.tests[0].failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected a string or array, but got {{actual}}')
+      selfTestsRunner.expect(error.message).toBe('Expectation {{actual}} is not a string or array')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        actual: '42'
+        actual: {
+          type: 'number',
+          representation: '42'
+        }
       })
-      selfTestsRunner.expect(error.expected).toBe('string or array')
-      selfTestsRunner.expect(error.actual).toBe(42)
     })
 
     selfTestsRunner.test('Should handle different invalid container types', async () => {
@@ -133,7 +144,7 @@ export async function toContainTest() {
       // All should fail with invalid container error
       tests.forEach((test) => {
         const error = test.failureReason as TestError
-        selfTestsRunner.expect(error.message).toBe('Expected a string or array, but got {{actual}}')
+        selfTestsRunner.expect(error.message).toBe('Expectation {{actual}} is not a string or array')
       })
     })
 
@@ -161,10 +172,16 @@ export async function toContainTest() {
       await testsRunner.run()
 
       const error = testsRunner.state.tests[0].failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} not to contain {{expected}}, but it did')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} not to contain {{target}}, but it did')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        expected: '2',
-        actual: 'Array'
+        target: {
+          type: 'number',
+          representation: '2'
+        },
+        actual: {
+          type: 'array',
+          representation: '[Array]'
+        }
       })
     })
 

@@ -28,12 +28,17 @@ export async function toBeNullTest() {
 
       selfTestsRunner.expect(testsRunner.isFailed).toBe(true)
       const error = testsRunner.state.tests[0].failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected value to be null, but got {{actual}}')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to be {{target}}')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        actual: '42'
+        actual: {
+          type: 'number',
+          representation: '42'
+        },
+        target: {
+          type: 'null',
+          representation: 'null'
+        }
       })
-      selfTestsRunner.expect(error.expected).toBe(null)
-      selfTestsRunner.expect(error.actual).toBe(42)
     })
 
     selfTestsRunner.test('Should handle different non-null types', async () => {
@@ -57,15 +62,24 @@ export async function toBeNullTest() {
 
       // Undefined test
       const undefinedError = tests[0].failureReason as TestError
-      selfTestsRunner.expect(undefinedError.messageLocals.actual).toBe('undefined')
+      selfTestsRunner.expect(undefinedError.messageLocals.actual).toEqual({
+        type: 'undefined',
+        representation: 'undefined'
+      })
 
       // String test
       const stringError = tests[1].failureReason as TestError
-      selfTestsRunner.expect(stringError.messageLocals.actual).toBe('hello')
+      selfTestsRunner.expect(stringError.messageLocals.actual).toEqual({
+        type: 'string',
+        representation: "'hello'"
+      })
 
       // Object test
       const objectError = tests[2].failureReason as TestError
-      selfTestsRunner.expect(objectError.messageLocals.actual).toBe('Object')
+      selfTestsRunner.expect(objectError.messageLocals.actual).toEqual({
+        type: 'instanceOf',
+        representation: 'Object'
+      })
     })
 
     selfTestsRunner.test('Should work with not.toBeNull for successful negation', async () => {
@@ -95,10 +109,17 @@ export async function toBeNullTest() {
       await testsRunner.run()
 
       const error = testsRunner.state.tests[0].failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected value not to be null, but it was')
-      selfTestsRunner.expect(error.messageLocals).toEqual({})
-      selfTestsRunner.expect(error.expected).toBe('not null')
-      selfTestsRunner.expect(error.actual).toBe(null)
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} not to be {{target}}, but it was')
+      selfTestsRunner.expect(error.messageLocals).toEqual({
+        actual: {
+          type: 'null',
+          representation: 'null'
+        },
+        target: {
+          type: 'null',
+          representation: 'null'
+        }
+      })
     })
 
     selfTestsRunner.test('Should distinguish null from other falsy values', async () => {

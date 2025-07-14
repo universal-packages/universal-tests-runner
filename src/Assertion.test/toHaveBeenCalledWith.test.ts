@@ -52,7 +52,17 @@ export async function toHaveBeenCalledWithTest() {
 
       const failedTest = testsRunner.state.tests[0]
       const error = failedTest.failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected mock function to have been called with given arguments, but it was not')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to have been called with {{args}}')
+      selfTestsRunner.expect(error.messageLocals).toEqual({
+        actual: {
+          type: 'function',
+          representation: '[Function]'
+        },
+        args: {
+          type: 'array',
+          representation: '[Array]'
+        }
+      })
     })
 
     selfTestsRunner.test('Should fail when mock function has not been called at all', async () => {
@@ -82,9 +92,12 @@ export async function toHaveBeenCalledWithTest() {
 
       const failedTest = testsRunner.state.tests[0]
       const error = failedTest.failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected a mock function, but got {{actual}}')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to be a mock function')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        actual: '()=>{}'
+        actual: {
+          type: 'function',
+          representation: '[Function]'
+        }
       })
     })
 
@@ -161,7 +174,17 @@ export async function toHaveBeenCalledWithTest() {
 
       const failedTest = testsRunner.state.tests[0]
       const error = failedTest.failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected mock function not to have been called with given arguments, but it was')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} not to have been called with {{args}}, but it was')
+      selfTestsRunner.expect(error.messageLocals).toEqual({
+        actual: {
+          type: 'function',
+          representation: '[Function]'
+        },
+        args: {
+          type: 'array',
+          representation: '[Array]'
+        }
+      })
     })
 
     selfTestsRunner.test('Should handle no arguments', async () => {

@@ -45,13 +45,17 @@ export async function toMatchTest() {
 
       selfTestsRunner.expect(testsRunner.isFailed).toBe(true)
       const error = testsRunner.state.tests[0].failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to match {{expected}}, but it did not')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to match {{target}}')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        expected: '/goodbye/',
-        actual: 'hello world'
+        target: {
+          type: 'instanceOf',
+          representation: 'RegExp'
+        },
+        actual: {
+          type: 'string',
+          representation: "'hello world'"
+        }
       })
-      selfTestsRunner.expect(error.expected).toEqual(/goodbye/)
-      selfTestsRunner.expect(error.actual).toBe('hello world')
     })
 
     selfTestsRunner.test('Should fail when value is not a string', async () => {
@@ -64,12 +68,13 @@ export async function toMatchTest() {
       await testsRunner.run()
 
       const error = testsRunner.state.tests[0].failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected a string, but got {{actual}}')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to be a string')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        actual: '123'
+        actual: {
+          type: 'number',
+          representation: '123'
+        }
       })
-      selfTestsRunner.expect(error.expected).toBe('string')
-      selfTestsRunner.expect(error.actual).toBe(123)
     })
 
     selfTestsRunner.test('Should handle different non-string types', async () => {
@@ -94,7 +99,7 @@ export async function toMatchTest() {
       // All should fail with non-string error
       tests.forEach((test) => {
         const error = test.failureReason as TestError
-        selfTestsRunner.expect(error.message).toBe('Expected a string, but got {{actual}}')
+        selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to be a string')
       })
     })
 
@@ -122,13 +127,17 @@ export async function toMatchTest() {
       await testsRunner.run()
 
       const error = testsRunner.state.tests[0].failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} not to match {{expected}}, but it did')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} not to match {{target}}, but it did')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        expected: '/hello/',
-        actual: 'hello world'
+        target: {
+          type: 'instanceOf',
+          representation: 'RegExp'
+        },
+        actual: {
+          type: 'string',
+          representation: "'hello world'"
+        }
       })
-      selfTestsRunner.expect(error.expected).toEqual(/hello/)
-      selfTestsRunner.expect(error.actual).toBe('hello world')
     })
 
     selfTestsRunner.test('Should handle complex regex patterns', async () => {

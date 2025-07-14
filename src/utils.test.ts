@@ -187,7 +187,7 @@ export function evaluateTestResults(selfTestsRunner: TestsRunner): void {
           const messageLocalsKeys = failureReason.messageLocals ? Object.keys(failureReason.messageLocals) : []
           let finalMessage = failureReason.message
           if (messageLocalsKeys.length > 0) {
-            finalMessage = finalMessage.replace(/{(\w+)}/g, (match, key) => failureReason.messageLocals[key] || match)
+            finalMessage = finalMessage.replace(/{(\w+)}/g, (match, key) => failureReason.messageLocals[key]?.representation || match)
           }
           console.log(finalMessage)
           if (failureReason.difference) {

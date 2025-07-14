@@ -39,12 +39,13 @@ export async function toBeTruthyTest() {
 
       selfTestsRunner.expect(testsRunner.isFailed).toBe(true)
       const error = testsRunner.state.tests[0].failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected value to be truthy, but got {{actual}}')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to be truthy')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        actual: 'false'
+        actual: {
+          type: 'boolean',
+          representation: 'false'
+        }
       })
-      selfTestsRunner.expect(error.expected).toBe('truthy')
-      selfTestsRunner.expect(error.actual).toBe(false)
     })
 
     selfTestsRunner.test('Should handle all falsy values', async () => {
@@ -84,23 +85,47 @@ export async function toBeTruthyTest() {
       })
 
       // Check specific error messages
+      // false test
       const falseError = tests[0].failureReason as TestError
-      selfTestsRunner.expect(falseError.messageLocals.actual).toBe('false')
+      selfTestsRunner.expect(falseError.messageLocals.actual).toEqual({
+        type: 'boolean',
+        representation: 'false'
+      })
 
+      // 0 test
       const zeroError = tests[1].failureReason as TestError
-      selfTestsRunner.expect(zeroError.messageLocals.actual).toBe('0')
+      selfTestsRunner.expect(zeroError.messageLocals.actual).toEqual({
+        type: 'number',
+        representation: '0'
+      })
 
-      const emptyStringError = tests[2].failureReason as TestError
-      selfTestsRunner.expect(emptyStringError.messageLocals.actual).toBe('')
+      // empty string test
+      const emptyError = tests[2].failureReason as TestError
+      selfTestsRunner.expect(emptyError.messageLocals.actual).toEqual({
+        type: 'string',
+        representation: "''"
+      })
 
+      // null test
       const nullError = tests[3].failureReason as TestError
-      selfTestsRunner.expect(nullError.messageLocals.actual).toBe('null')
+      selfTestsRunner.expect(nullError.messageLocals.actual).toEqual({
+        type: 'null',
+        representation: 'null'
+      })
 
+      // undefined test
       const undefinedError = tests[4].failureReason as TestError
-      selfTestsRunner.expect(undefinedError.messageLocals.actual).toBe('undefined')
+      selfTestsRunner.expect(undefinedError.messageLocals.actual).toEqual({
+        type: 'undefined',
+        representation: 'undefined'
+      })
 
+      // NaN test
       const nanError = tests[5].failureReason as TestError
-      selfTestsRunner.expect(nanError.messageLocals.actual).toBe('NaN')
+      selfTestsRunner.expect(nanError.messageLocals.actual).toEqual({
+        type: 'number',
+        representation: 'NaN'
+      })
     })
 
     selfTestsRunner.test('Should work with not.toBeTruthy for successful negation', async () => {
@@ -129,12 +154,13 @@ export async function toBeTruthyTest() {
       await testsRunner.run()
 
       const error = testsRunner.state.tests[0].failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected value to be falsy, but got {{actual}}')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to not be truthy, but it was')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        actual: '42'
+        actual: {
+          type: 'number',
+          representation: '42'
+        }
       })
-      selfTestsRunner.expect(error.expected).toBe('falsy')
-      selfTestsRunner.expect(error.actual).toBe(42)
     })
 
     selfTestsRunner.test('Should handle different truthy types with not.toBeTruthy', async () => {
@@ -158,15 +184,24 @@ export async function toBeTruthyTest() {
 
       // String test
       const stringError = tests[0].failureReason as TestError
-      selfTestsRunner.expect(stringError.messageLocals.actual).toBe('hello')
+      selfTestsRunner.expect(stringError.messageLocals.actual).toEqual({
+        type: 'string',
+        representation: "'hello'"
+      })
 
       // Object test
       const objectError = tests[1].failureReason as TestError
-      selfTestsRunner.expect(objectError.messageLocals.actual).toBe('Object')
+      selfTestsRunner.expect(objectError.messageLocals.actual).toEqual({
+        type: 'instanceOf',
+        representation: 'Object'
+      })
 
       // Array test
       const arrayError = tests[2].failureReason as TestError
-      selfTestsRunner.expect(arrayError.messageLocals.actual).toBe('Array')
+      selfTestsRunner.expect(arrayError.messageLocals.actual).toEqual({
+        type: 'array',
+        representation: '[Array]'
+      })
     })
   })
 

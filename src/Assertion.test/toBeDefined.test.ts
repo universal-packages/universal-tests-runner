@@ -36,10 +36,13 @@ export async function toBeDefinedTest() {
 
       selfTestsRunner.expect(testsRunner.isFailed).toBe(true)
       const error = testsRunner.state.tests[0].failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected value to be defined, but it was undefined')
-      selfTestsRunner.expect(error.messageLocals).toEqual({})
-      selfTestsRunner.expect(error.expected).toBe('defined')
-      selfTestsRunner.expect(error.actual).toBe(undefined)
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to be defined')
+      selfTestsRunner.expect(error.messageLocals).toEqual({
+        actual: {
+          type: 'undefined',
+          representation: 'undefined'
+        }
+      })
     })
 
     selfTestsRunner.test('Should fail with uninitialized variables', async () => {
@@ -53,8 +56,7 @@ export async function toBeDefinedTest() {
       await testsRunner.run()
 
       const error = testsRunner.state.tests[0].failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected value to be defined, but it was undefined')
-      selfTestsRunner.expect(error.actual).toBe(undefined)
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to be defined')
     })
 
     selfTestsRunner.test('Should work with not.toBeDefined for successful negation', async () => {
@@ -84,12 +86,13 @@ export async function toBeDefinedTest() {
       await testsRunner.run()
 
       const error = testsRunner.state.tests[0].failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected value to be undefined, but got {{actual}}')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to not be defined, but it was')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        actual: '42'
+        actual: {
+          type: 'number',
+          representation: '42'
+        }
       })
-      selfTestsRunner.expect(error.expected).toBe(undefined)
-      selfTestsRunner.expect(error.actual).toBe(42)
     })
 
     selfTestsRunner.test('Should handle different defined types with not.toBeDefined', async () => {
@@ -113,15 +116,24 @@ export async function toBeDefinedTest() {
 
       // Null test
       const nullError = tests[0].failureReason as TestError
-      selfTestsRunner.expect(nullError.messageLocals.actual).toBe('null')
+      selfTestsRunner.expect(nullError.messageLocals.actual).toEqual({
+        type: 'null',
+        representation: 'null'
+      })
 
       // String test
       const stringError = tests[1].failureReason as TestError
-      selfTestsRunner.expect(stringError.messageLocals.actual).toBe('hello')
+      selfTestsRunner.expect(stringError.messageLocals.actual).toEqual({
+        type: 'string',
+        representation: "'hello'"
+      })
 
       // Object test
       const objectError = tests[2].failureReason as TestError
-      selfTestsRunner.expect(objectError.messageLocals.actual).toBe('Object')
+      selfTestsRunner.expect(objectError.messageLocals.actual).toEqual({
+        type: 'instanceOf',
+        representation: 'Object'
+      })
     })
 
     selfTestsRunner.test('Should understand that null is defined but undefined is not', async () => {

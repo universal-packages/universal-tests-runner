@@ -34,13 +34,17 @@ export async function toBeNaNTest() {
 
       selfTestsRunner.expect(testsRunner.isFailed).toBe(true)
       const error = testsRunner.state.tests[0].failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected value to be NaN, but got {{actual}}')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to be {{target}}')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        actual: '42'
+        target: {
+          type: 'number',
+          representation: 'NaN'
+        },
+        actual: {
+          type: 'number',
+          representation: '42'
+        }
       })
-      // Note: Can't use .toBe(NaN) because NaN !== NaN
-      selfTestsRunner.expect(Number.isNaN(error.expected)).toBe(true)
-      selfTestsRunner.expect(error.actual).toBe(42)
     })
 
     selfTestsRunner.test('Should handle different non-NaN number types', async () => {
@@ -68,19 +72,31 @@ export async function toBeNaNTest() {
 
       // Zero test
       const zeroError = tests[0].failureReason as TestError
-      selfTestsRunner.expect(zeroError.messageLocals.actual).toBe('0')
+      selfTestsRunner.expect(zeroError.messageLocals.actual).toEqual({
+        type: 'number',
+        representation: '0'
+      })
 
       // Infinity test
       const infinityError = tests[1].failureReason as TestError
-      selfTestsRunner.expect(infinityError.messageLocals.actual).toBe('Infinity')
+      selfTestsRunner.expect(infinityError.messageLocals.actual).toEqual({
+        type: 'number',
+        representation: 'Infinity'
+      })
 
       // Negative infinity test
       const negInfinityError = tests[2].failureReason as TestError
-      selfTestsRunner.expect(negInfinityError.messageLocals.actual).toBe('-Infinity')
+      selfTestsRunner.expect(negInfinityError.messageLocals.actual).toEqual({
+        type: 'number',
+        representation: '-Infinity'
+      })
 
       // Float test
       const floatError = tests[3].failureReason as TestError
-      selfTestsRunner.expect(floatError.messageLocals.actual).toBe('3.14')
+      selfTestsRunner.expect(floatError.messageLocals.actual).toEqual({
+        type: 'number',
+        representation: '3.14'
+      })
     })
 
     selfTestsRunner.test('Should handle non-number types', async () => {
@@ -108,19 +124,31 @@ export async function toBeNaNTest() {
 
       // String test
       const stringError = tests[0].failureReason as TestError
-      selfTestsRunner.expect(stringError.messageLocals.actual).toBe('NaN')
+      selfTestsRunner.expect(stringError.messageLocals.actual).toEqual({
+        type: 'string',
+        representation: "'NaN'"
+      })
 
       // Null test
       const nullError = tests[1].failureReason as TestError
-      selfTestsRunner.expect(nullError.messageLocals.actual).toBe('null')
+      selfTestsRunner.expect(nullError.messageLocals.actual).toEqual({
+        type: 'null',
+        representation: 'null'
+      })
 
       // Undefined test
       const undefinedError = tests[2].failureReason as TestError
-      selfTestsRunner.expect(undefinedError.messageLocals.actual).toBe('undefined')
+      selfTestsRunner.expect(undefinedError.messageLocals.actual).toEqual({
+        type: 'undefined',
+        representation: 'undefined'
+      })
 
       // Object test
       const objectError = tests[3].failureReason as TestError
-      selfTestsRunner.expect(objectError.messageLocals.actual).toBe('Object')
+      selfTestsRunner.expect(objectError.messageLocals.actual).toEqual({
+        type: 'instanceOf',
+        representation: 'Object'
+      })
     })
 
     selfTestsRunner.test('Should work with not.toBeNaN for successful negation', async () => {
@@ -153,11 +181,17 @@ export async function toBeNaNTest() {
       await testsRunner.run()
 
       const error = testsRunner.state.tests[0].failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected value not to be NaN, but it was')
-      selfTestsRunner.expect(error.messageLocals).toEqual({})
-      selfTestsRunner.expect(error.expected).toBe('not NaN')
-      // Note: Can't use .toBe(NaN) because NaN !== NaN
-      selfTestsRunner.expect(Number.isNaN(error.actual)).toBe(true)
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} not to be {{target}}, but it was')
+      selfTestsRunner.expect(error.messageLocals).toEqual({
+        target: {
+          type: 'number',
+          representation: 'NaN'
+        },
+        actual: {
+          type: 'number',
+          representation: 'NaN'
+        }
+      })
     })
 
     selfTestsRunner.test('Should use Number.isNaN internally (not global isNaN)', async () => {

@@ -33,9 +33,16 @@ export async function toRejectTest() {
 
       const failedTest = testsRunner.state.tests[0]
       const error = failedTest.failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected promise to reject, but it resolved with {{actual}}')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to reject, but it resolved with {{result}}')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        actual: 'success'
+        actual: {
+          type: 'instanceOf',
+          representation: 'Promise'
+        },
+        result: {
+          type: 'string',
+          representation: "'success'"
+        }
       })
     })
 
@@ -51,9 +58,12 @@ export async function toRejectTest() {
 
       const failedTest = testsRunner.state.tests[0]
       const error = failedTest.failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected a promise, but got {{actual}}')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to be a promise')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        actual: 'not a promise'
+        actual: {
+          type: 'string',
+          representation: "'not a promise'"
+        }
       })
     })
 
@@ -85,10 +95,20 @@ export async function toRejectTest() {
 
       const failedTest = testsRunner.state.tests[0]
       const error = failedTest.failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected promise to reject with {{expected}}, but it rejected with {{actual}}')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to reject with {{target}}, but it rejected with {{error}}')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        expected: 'different error',
-        actual: 'Something went wrong'
+        target: {
+          type: 'string',
+          representation: "'different error'"
+        },
+        actual: {
+          type: 'instanceOf',
+          representation: 'Promise'
+        },
+        error: {
+          type: 'instanceOf',
+          representation: 'Error'
+        }
       })
     })
 
@@ -174,9 +194,16 @@ export async function toRejectTest() {
 
       const failedTest = testsRunner.state.tests[0]
       const error = failedTest.failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected promise not to reject, but it rejected with {{actual}}')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} not to reject, but it did with {{error}}')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        actual: 'Failed'
+        actual: {
+          type: 'instanceOf',
+          representation: 'Promise'
+        },
+        error: {
+          type: 'instanceOf',
+          representation: 'Error'
+        }
       })
     })
 
@@ -209,9 +236,16 @@ export async function toRejectTest() {
 
       const failedTest = testsRunner.state.tests[0]
       const error = failedTest.failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected promise not to reject with {{expected}}, but it did')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} not to reject with {{target}}, but it did')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        expected: 'Specific error'
+        actual: {
+          type: 'instanceOf',
+          representation: 'Promise'
+        },
+        target: {
+          type: 'string',
+          representation: "'Specific error'"
+        }
       })
     })
 

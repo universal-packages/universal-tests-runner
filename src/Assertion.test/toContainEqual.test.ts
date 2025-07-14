@@ -56,12 +56,17 @@ export async function toContainEqualTest() {
 
       selfTestsRunner.expect(testsRunner.isFailed).toBe(true)
       const error = testsRunner.state.tests[0].failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to contain an item equal to {{expected}}, but it did not')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to contain an item equal to {{target}}')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        expected: 'Object',
-        actual: 'Array'
+        target: {
+          type: 'instanceOf',
+          representation: 'Object'
+        },
+        actual: {
+          type: 'array',
+          representation: '[Array]'
+        }
       })
-      selfTestsRunner.expect(error.expected).toEqual({ name: 'Bob' })
     })
 
     selfTestsRunner.test('Should handle partial vs complete object matching', async () => {
@@ -89,12 +94,13 @@ export async function toContainEqualTest() {
       await testsRunner.run()
 
       const error = testsRunner.state.tests[0].failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected an array, but got {{actual}}')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to be an array')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        actual: 'hello world'
+        actual: {
+          type: 'string',
+          representation: "'hello world'"
+        }
       })
-      selfTestsRunner.expect(error.expected).toBe('array')
-      selfTestsRunner.expect(error.actual).toBe('hello world')
     })
 
     selfTestsRunner.test('Should handle different invalid container types', async () => {
@@ -119,7 +125,7 @@ export async function toContainEqualTest() {
       // All should fail with invalid container error
       tests.forEach((test) => {
         const error = test.failureReason as TestError
-        selfTestsRunner.expect(error.message).toBe('Expected an array, but got {{actual}}')
+        selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to be an array')
       })
     })
 
@@ -155,10 +161,16 @@ export async function toContainEqualTest() {
       await testsRunner.run()
 
       const error = testsRunner.state.tests[0].failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} not to contain an item equal to {{expected}}, but it did')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} not to contain an item equal to {{target}}, but it did')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        expected: 'Object',
-        actual: 'Array'
+        target: {
+          type: 'instanceOf',
+          representation: 'Object'
+        },
+        actual: {
+          type: 'array',
+          representation: '[Array]'
+        }
       })
     })
 

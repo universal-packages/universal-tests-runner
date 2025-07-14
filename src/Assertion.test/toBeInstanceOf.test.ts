@@ -73,13 +73,17 @@ export async function toBeInstanceOfTest() {
 
       selfTestsRunner.expect(testsRunner.isFailed).toBe(true)
       const error = testsRunner.state.tests[0].failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to be instance of {{expected}}, but it was not')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to be instance of {{target}}')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        expected: 'Date',
-        actual: 'hello'
+        target: {
+          type: 'function',
+          representation: '[Function]'
+        },
+        actual: {
+          type: 'string',
+          representation: "'hello'"
+        }
       })
-      selfTestsRunner.expect(error.expected).toBe('Date')
-      selfTestsRunner.expect(error.actual).toBe('hello')
     })
 
     selfTestsRunner.test('Should handle different non-instance types', async () => {
@@ -107,20 +111,31 @@ export async function toBeInstanceOfTest() {
 
       // Number test
       const numberError = tests[0].failureReason as TestError
-      selfTestsRunner.expect(numberError.messageLocals.actual).toBe('42')
-      selfTestsRunner.expect(numberError.messageLocals.expected).toBe('String')
+      selfTestsRunner.expect(numberError.messageLocals.actual).toEqual({
+        type: 'number',
+        representation: '42'
+      })
 
       // Null test
       const nullError = tests[1].failureReason as TestError
-      selfTestsRunner.expect(nullError.messageLocals.actual).toBe('null')
+      selfTestsRunner.expect(nullError.messageLocals.actual).toEqual({
+        type: 'null',
+        representation: 'null'
+      })
 
       // Undefined test
       const undefinedError = tests[2].failureReason as TestError
-      selfTestsRunner.expect(undefinedError.messageLocals.actual).toBe('undefined')
+      selfTestsRunner.expect(undefinedError.messageLocals.actual).toEqual({
+        type: 'undefined',
+        representation: 'undefined'
+      })
 
       // Primitive vs wrapper test
       const primitiveError = tests[3].failureReason as TestError
-      selfTestsRunner.expect(primitiveError.messageLocals.actual).toBe('hello')
+      selfTestsRunner.expect(primitiveError.messageLocals.actual).toEqual({
+        type: 'string',
+        representation: "'hello'"
+      })
     })
 
     selfTestsRunner.test('Should work with not.toBeInstanceOf for successful negation', async () => {
@@ -154,13 +169,17 @@ export async function toBeInstanceOfTest() {
       await testsRunner.run()
 
       const error = testsRunner.state.tests[0].failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} not to be instance of {{expected}}, but it was')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} not to be instance of {{target}}, but it was')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        expected: 'Date',
-        actual: 'Object'
+        target: {
+          type: 'function',
+          representation: '[Function]'
+        },
+        actual: {
+          type: 'instanceOf',
+          representation: 'Date'
+        }
       })
-      selfTestsRunner.expect(error.expected).toBe('Date')
-      selfTestsRunner.expect(error.actual).toBeInstanceOf(Date)
     })
 
     selfTestsRunner.test('Should handle inheritance correctly', async () => {

@@ -78,13 +78,17 @@ export async function toBeTest() {
       const failedTest = testsRunner.state.tests[0]
       const error = failedTest.failureReason as TestError
 
-      selfTestsRunner.expect(error.message).toBe('Expected {{expected}} but got {{actual}}')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to be {{target}}')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        expected: '43',
-        actual: '42'
+        target: {
+          type: 'number',
+          representation: '43'
+        },
+        actual: {
+          type: 'number',
+          representation: '42'
+        }
       })
-      selfTestsRunner.expect(error.expected).toBe(43)
-      selfTestsRunner.expect(error.actual).toBe(42)
     })
 
     selfTestsRunner.test('Should handle different primitive types in error messages', async () => {
@@ -109,22 +113,40 @@ export async function toBeTest() {
       // String test
       const stringError = tests[0].failureReason as TestError
       selfTestsRunner.expect(stringError.messageLocals).toEqual({
-        expected: 'world',
-        actual: 'hello'
+        target: {
+          type: 'string',
+          representation: "'world'"
+        },
+        actual: {
+          type: 'string',
+          representation: "'hello'"
+        }
       })
 
       // Boolean test
       const boolError = tests[1].failureReason as TestError
       selfTestsRunner.expect(boolError.messageLocals).toEqual({
-        expected: 'false',
-        actual: 'true'
+        target: {
+          type: 'boolean',
+          representation: 'false'
+        },
+        actual: {
+          type: 'boolean',
+          representation: 'true'
+        }
       })
 
       // Null vs undefined test
       const nullError = tests[2].failureReason as TestError
       selfTestsRunner.expect(nullError.messageLocals).toEqual({
-        expected: 'undefined',
-        actual: 'null'
+        target: {
+          type: 'undefined',
+          representation: 'undefined'
+        },
+        actual: {
+          type: 'null',
+          representation: 'null'
+        }
       })
     })
 
@@ -146,15 +168,27 @@ export async function toBeTest() {
       // Object test
       const objError = tests[0].failureReason as TestError
       selfTestsRunner.expect(objError.messageLocals).toEqual({
-        expected: 'Object',
-        actual: 'Object'
+        target: {
+          type: 'instanceOf',
+          representation: 'Object'
+        },
+        actual: {
+          type: 'instanceOf',
+          representation: 'Object'
+        }
       })
 
       // Array test
       const arrError = tests[1].failureReason as TestError
       selfTestsRunner.expect(arrError.messageLocals).toEqual({
-        expected: 'Array',
-        actual: 'Array'
+        target: {
+          type: 'array',
+          representation: '[Array]'
+        },
+        actual: {
+          type: 'array',
+          representation: '[Array]'
+        }
       })
     })
 
@@ -186,13 +220,17 @@ export async function toBeTest() {
       const failedTest = testsRunner.state.tests[0]
       const error = failedTest.failureReason as TestError
 
-      selfTestsRunner.expect(error.message).toBe('Expected {{expected}} not to be {{actual}}, but it was')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} not to be {{target}}, but it was')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        expected: '42',
-        actual: '42'
+        target: {
+          type: 'number',
+          representation: '42'
+        },
+        actual: {
+          type: 'number',
+          representation: '42'
+        }
       })
-      selfTestsRunner.expect(error.expected).toBe(42)
-      selfTestsRunner.expect(error.actual).toBe(42)
     })
 
     selfTestsRunner.test('Should handle not.toBe with different types', async () => {
@@ -214,15 +252,27 @@ export async function toBeTest() {
       // String test
       const stringError = tests[0].failureReason as TestError
       selfTestsRunner.expect(stringError.messageLocals).toEqual({
-        expected: 'test',
-        actual: 'test'
+        target: {
+          type: 'string',
+          representation: "'test'"
+        },
+        actual: {
+          type: 'string',
+          representation: "'test'"
+        }
       })
 
       // Object test
       const objError = tests[1].failureReason as TestError
       selfTestsRunner.expect(objError.messageLocals).toEqual({
-        expected: 'Object',
-        actual: 'Object'
+        target: {
+          type: 'instanceOf',
+          representation: 'Object'
+        },
+        actual: {
+          type: 'instanceOf',
+          representation: 'Object'
+        }
       })
     })
 
@@ -286,9 +336,7 @@ export async function toBeTest() {
 
       // Check the failed test error
       const failedError = tests[1].failureReason as TestError
-      selfTestsRunner.expect(failedError.message).toBe('Expected {{expected}} but got {{actual}}')
-      selfTestsRunner.expect(failedError.expected).toBe(2)
-      selfTestsRunner.expect(failedError.actual).toBe(1)
+      selfTestsRunner.expect(failedError.message).toBe('Expected {{actual}} to be {{target}}')
     })
 
     selfTestsRunner.test('Should handle toBe with asymmetric assertions', async () => {
@@ -319,9 +367,15 @@ export async function toBeTest() {
       const failedTest = testsRunner.state.tests[0]
       const error = failedTest.failureReason as TestError
 
-      selfTestsRunner.expect(error.message).toBe('Expected {{expected}} not to be {{actual}}, but it was')
-      selfTestsRunner.expect(error.messageLocals.expected).toBe('Anything')
-      selfTestsRunner.expect(error.messageLocals.actual).toBe('42')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} not to be {{target}}, but it was')
+      selfTestsRunner.expect(error.messageLocals.target).toEqual({
+        type: 'asymmetric-assertion',
+        representation: 'AnythingAssertion'
+      })
+      selfTestsRunner.expect(error.messageLocals.actual).toEqual({
+        type: 'number',
+        representation: '42'
+      })
     })
 
     selfTestsRunner.test('Should preserve error stack traces', async () => {
@@ -357,8 +411,6 @@ export async function toBeTest() {
       selfTestsRunner.expect(failedTest.status).toBe('failed')
 
       const error = failedTest.failureReason as TestError
-      selfTestsRunner.expect(error.expected).toBe(4)
-      selfTestsRunner.expect(error.actual).toBe(3)
     })
 
     selfTestsRunner.test('Should handle edge cases with message formatting', async () => {
@@ -380,13 +432,13 @@ export async function toBeTest() {
 
       // Empty string test
       const emptyStringError = tests[0].failureReason as TestError
-      selfTestsRunner.expect(emptyStringError.messageLocals.actual).toBe('')
-      selfTestsRunner.expect(emptyStringError.messageLocals.expected).toBe('not empty')
+      selfTestsRunner.expect(emptyStringError.messageLocals.actual.representation).toBe("''")
+      selfTestsRunner.expect(emptyStringError.messageLocals.target.representation).toBe("'not empty'")
 
       // Symbol test
       const symbolError = tests[1].failureReason as TestError
-      selfTestsRunner.expect(symbolError.messageLocals.actual).toContain('Symbol(test)')
-      selfTestsRunner.expect(symbolError.messageLocals.expected).toContain('Symbol(test)')
+      selfTestsRunner.expect(symbolError.messageLocals.actual.representation).toBe('[Object]')
+      selfTestsRunner.expect(symbolError.messageLocals.target.representation).toBe('[Object]')
     })
   })
 

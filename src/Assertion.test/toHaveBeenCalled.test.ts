@@ -50,9 +50,13 @@ export async function toHaveBeenCalledTest() {
 
       const failedTest = testsRunner.state.tests[0]
       const error = failedTest.failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected mock function to have been called, but it was not called')
-      selfTestsRunner.expect(error.expected).toBe('at least 1 call')
-      selfTestsRunner.expect(error.actual).toBe('0 calls')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to have been called, but it was not called')
+      selfTestsRunner.expect(error.messageLocals).toEqual({
+        actual: {
+          type: 'function',
+          representation: '[Function]'
+        }
+      })
     })
 
     selfTestsRunner.test('Should fail when value is not a mock function', async () => {
@@ -69,9 +73,12 @@ export async function toHaveBeenCalledTest() {
 
       const failedTest = testsRunner.state.tests[0]
       const error = failedTest.failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected a mock function, but got {{actual}}')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to be a mock function')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        actual: String(() => {})
+        actual: {
+          type: 'function',
+          representation: '[Function]'
+        }
       })
     })
 
@@ -87,9 +94,12 @@ export async function toHaveBeenCalledTest() {
 
       const failedTest = testsRunner.state.tests[0]
       const error = failedTest.failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected a mock function, but got {{actual}}')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to be a mock function')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        actual: 'not a function'
+        actual: {
+          type: 'string',
+          representation: "'not a function'"
+        }
       })
     })
 
@@ -121,12 +131,17 @@ export async function toHaveBeenCalledTest() {
 
       const failedTest = testsRunner.state.tests[0]
       const error = failedTest.failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected mock function not to have been called, but it was called {{count}} times')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} not to have been called, but it was called {{count}} times')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        count: '1'
+        actual: {
+          type: 'function',
+          representation: '[Function]'
+        },
+        count: {
+          type: 'number',
+          representation: '1'
+        }
       })
-      selfTestsRunner.expect(error.expected).toBe(0)
-      selfTestsRunner.expect(error.actual).toBe(1)
     })
 
     selfTestsRunner.test('Should fail with not.toHaveBeenCalled when mock function has been called multiple times', async () => {
@@ -147,9 +162,15 @@ export async function toHaveBeenCalledTest() {
       const failedTest = testsRunner.state.tests[0]
       const error = failedTest.failureReason as TestError
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        count: '3'
+        actual: {
+          type: 'function',
+          representation: '[Function]'
+        },
+        count: {
+          type: 'number',
+          representation: '3'
+        }
       })
-      selfTestsRunner.expect(error.actual).toBe(3)
     })
 
     selfTestsRunner.test('Should work with mock function calls with arguments', async () => {

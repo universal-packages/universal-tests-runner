@@ -49,10 +49,16 @@ export async function toMatchObjectTest() {
 
       const failedTest = testsRunner.state.tests[0]
       const error = failedTest.failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected {{expected}} to match {{actual}}')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to match {{target}}')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        expected: 'Object',
-        actual: 'Object'
+        target: {
+          type: 'instanceOf',
+          representation: 'Object'
+        },
+        actual: {
+          type: 'instanceOf',
+          representation: 'Object'
+        }
       })
     })
 
@@ -68,9 +74,12 @@ export async function toMatchObjectTest() {
 
       const failedTest = testsRunner.state.tests[0]
       const error = failedTest.failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected an object, but got {{actual}}')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to be an object')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        actual: 'not an object'
+        actual: {
+          type: 'string',
+          representation: "'not an object'"
+        }
       })
     })
 
@@ -86,9 +95,12 @@ export async function toMatchObjectTest() {
 
       const failedTest = testsRunner.state.tests[0]
       const error = failedTest.failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected an object, but got {{actual}}')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to be an object')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        actual: 'null'
+        actual: {
+          type: 'null',
+          representation: 'null'
+        }
       })
     })
 
@@ -224,10 +236,16 @@ export async function toMatchObjectTest() {
 
       const failedTest = testsRunner.state.tests[0]
       const error = failedTest.failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected {{expected}} not to match {{actual}}')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} not to match {{target}}')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        expected: 'Object',
-        actual: 'Object'
+        target: {
+          type: 'instanceOf',
+          representation: 'Object'
+        },
+        actual: {
+          type: 'instanceOf',
+          representation: 'Object'
+        }
       })
     })
 

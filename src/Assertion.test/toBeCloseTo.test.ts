@@ -46,12 +46,21 @@ export async function toBeCloseToTest() {
 
       selfTestsRunner.expect(testsRunner.isFailed).toBe(true)
       const error = testsRunner.state.tests[0].failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to be close to {{expected}} (precision: {{precision}}), but it was not')
-      selfTestsRunner.expect(error.messageLocals.actual).toBe('0.1')
-      selfTestsRunner.expect(error.messageLocals.expected).toBe('0.2')
-      selfTestsRunner.expect(error.messageLocals.precision).toBe('2') // Default precision
-      selfTestsRunner.expect(error.expected).toBe(0.2)
-      selfTestsRunner.expect(error.actual).toBe(0.1)
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to be close to {{target}} (precision: {{precision}})')
+      selfTestsRunner.expect(error.messageLocals).toEqual({
+        target: {
+          type: 'number',
+          representation: '0.2'
+        },
+        actual: {
+          type: 'number',
+          representation: '0.1'
+        },
+        precision: {
+          type: 'number',
+          representation: '2'
+        }
+      })
     })
 
     selfTestsRunner.test('Should fail when values are not close enough with custom precision', async () => {
@@ -64,7 +73,10 @@ export async function toBeCloseToTest() {
       await testsRunner.run()
 
       const error = testsRunner.state.tests[0].failureReason as TestError
-      selfTestsRunner.expect(error.messageLocals.precision).toBe('3')
+      selfTestsRunner.expect(error.messageLocals.precision).toEqual({
+        type: 'number',
+        representation: '3'
+      })
     })
 
     selfTestsRunner.test('Should throw error when actual value is not a number', async () => {
@@ -77,12 +89,13 @@ export async function toBeCloseToTest() {
       await testsRunner.run()
 
       const error = testsRunner.state.tests[0].failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected a number, but got {{actual}}')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to be a number')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        actual: 'hello'
+        actual: {
+          type: 'string',
+          representation: "'hello'"
+        }
       })
-      selfTestsRunner.expect(error.expected).toBe('number')
-      selfTestsRunner.expect(error.actual).toBe('hello')
     })
 
     selfTestsRunner.test('Should work with not.toBeCloseTo for successful negation', async () => {
@@ -108,8 +121,21 @@ export async function toBeCloseToTest() {
       await testsRunner.run()
 
       const error = testsRunner.state.tests[0].failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} not to be close to {{expected}} (precision: {{precision}}), but it was')
-      selfTestsRunner.expect(error.messageLocals.precision).toBe('2') // Default precision
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} not to be close to {{target}} (precision: {{precision}}), but it was')
+      selfTestsRunner.expect(error.messageLocals).toEqual({
+        target: {
+          type: 'number',
+          representation: '0.3'
+        },
+        actual: {
+          type: 'number',
+          representation: '0.30000000000000004'
+        },
+        precision: {
+          type: 'number',
+          representation: '2'
+        }
+      })
     })
 
     selfTestsRunner.test('Should handle edge cases', async () => {

@@ -36,13 +36,17 @@ export async function toBeLessThanOrEqualTest() {
 
       selfTestsRunner.expect(testsRunner.isFailed).toBe(true)
       const error = testsRunner.state.tests[0].failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to be less than or equal to {{expected}}, but it was not')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to be less than or equal to {{target}}')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        expected: '3',
-        actual: '5'
+        target: {
+          type: 'number',
+          representation: '3'
+        },
+        actual: {
+          type: 'number',
+          representation: '5'
+        }
       })
-      selfTestsRunner.expect(error.expected).toBe(3)
-      selfTestsRunner.expect(error.actual).toBe(5)
     })
 
     selfTestsRunner.test('Should throw error when actual value is not a number', async () => {
@@ -55,12 +59,13 @@ export async function toBeLessThanOrEqualTest() {
       await testsRunner.run()
 
       const error = testsRunner.state.tests[0].failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected a number, but got {{actual}}')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to be a number')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        actual: 'hello'
+        actual: {
+          type: 'string',
+          representation: "'hello'"
+        }
       })
-      selfTestsRunner.expect(error.expected).toBe('number')
-      selfTestsRunner.expect(error.actual).toBe('hello')
     })
 
     selfTestsRunner.test('Should work with not.toBeLessThanOrEqual for successful negation', async () => {
@@ -86,10 +91,16 @@ export async function toBeLessThanOrEqualTest() {
       await testsRunner.run()
 
       const error = testsRunner.state.tests[0].failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} not to be less than or equal to {{expected}}, but it was')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} not to be less than or equal to {{target}}, but it was')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        expected: '10',
-        actual: '3'
+        target: {
+          type: 'number',
+          representation: '10'
+        },
+        actual: {
+          type: 'number',
+          representation: '3'
+        }
       })
     })
 
@@ -103,10 +114,16 @@ export async function toBeLessThanOrEqualTest() {
       await testsRunner.run()
 
       const error = testsRunner.state.tests[0].failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} not to be less than or equal to {{expected}}, but it was')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} not to be less than or equal to {{target}}, but it was')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        expected: '5',
-        actual: '5'
+        target: {
+          type: 'number',
+          representation: '5'
+        },
+        actual: {
+          type: 'number',
+          representation: '5'
+        }
       })
     })
 

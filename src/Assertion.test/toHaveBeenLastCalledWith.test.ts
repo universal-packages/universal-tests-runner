@@ -53,10 +53,16 @@ export async function toHaveBeenLastCalledWithTest() {
 
       const failedTest = testsRunner.state.tests[0]
       const error = failedTest.failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected last call to have been called with {{expected}}, but it was called with {{actual}}')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to have been called last with {{args}}')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        expected: 'Array',
-        actual: 'Array'
+        actual: {
+          type: 'function',
+          representation: '[Function]'
+        },
+        args: {
+          type: 'array',
+          representation: '[Array]'
+        }
       })
     })
 
@@ -74,9 +80,13 @@ export async function toHaveBeenLastCalledWithTest() {
 
       const failedTest = testsRunner.state.tests[0]
       const error = failedTest.failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected mock function to have been called, but it was not called')
-      selfTestsRunner.expect(error.expected).toBe('at least 1 call')
-      selfTestsRunner.expect(error.actual).toBe('0 calls')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to have been called, but it was not called')
+      selfTestsRunner.expect(error.messageLocals).toEqual({
+        actual: {
+          type: 'function',
+          representation: '[Function]'
+        }
+      })
     })
 
     selfTestsRunner.test('Should fail when value is not a mock function', async () => {
@@ -93,9 +103,12 @@ export async function toHaveBeenLastCalledWithTest() {
 
       const failedTest = testsRunner.state.tests[0]
       const error = failedTest.failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected a mock function, but got {{actual}}')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to be a mock function')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        actual: '()=>{}'
+        actual: {
+          type: 'function',
+          representation: '[Function]'
+        }
       })
     })
 
@@ -164,7 +177,17 @@ export async function toHaveBeenLastCalledWithTest() {
 
       const failedTest = testsRunner.state.tests[0]
       const error = failedTest.failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected last call not to have been called with given arguments, but it was')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} not to have been called last with {{args}}, but it was')
+      selfTestsRunner.expect(error.messageLocals).toEqual({
+        actual: {
+          type: 'function',
+          representation: '[Function]'
+        },
+        args: {
+          type: 'array',
+          representation: '[Array]'
+        }
+      })
     })
 
     selfTestsRunner.test('Should handle no arguments', async () => {

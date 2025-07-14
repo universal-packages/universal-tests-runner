@@ -53,12 +53,24 @@ export async function toHaveBeenCalledTimesWithTest() {
 
       const failedTest = testsRunner.state.tests[0]
       const error = failedTest.failureReason as TestError
-      selfTestsRunner
-        .expect(error.message)
-        .toBe('Expected mock function to have been called {{expected}} times with given arguments, but it was called {{actual}} times with those arguments')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to have been called {{target}} times with {{args}}, but it was called {{count}} times')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        expected: '3',
-        actual: '2'
+        actual: {
+          type: 'function',
+          representation: '[Function]'
+        },
+        target: {
+          type: 'number',
+          representation: '3'
+        },
+        args: {
+          type: 'array',
+          representation: '[Array]'
+        },
+        count: {
+          type: 'number',
+          representation: '2'
+        }
       })
     })
 
@@ -76,7 +88,13 @@ export async function toHaveBeenCalledTimesWithTest() {
 
       const failedTest = testsRunner.state.tests[0]
       const error = failedTest.failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected a mock function, but got {{actual}}')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to be a mock function')
+      selfTestsRunner.expect(error.messageLocals).toEqual({
+        actual: {
+          type: 'function',
+          representation: '[Function]'
+        }
+      })
     })
 
     selfTestsRunner.test('Should pass with not.toHaveBeenCalledTimesWith when call count is different', async () => {
@@ -111,7 +129,21 @@ export async function toHaveBeenCalledTimesWithTest() {
 
       const failedTest = testsRunner.state.tests[0]
       const error = failedTest.failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected mock function not to have been called {{expected}} times with given arguments, but it was')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} not to have been called {{target}} times with {{args}}, but it was')
+      selfTestsRunner.expect(error.messageLocals).toEqual({
+        actual: {
+          type: 'function',
+          representation: '[Function]'
+        },
+        target: {
+          type: 'number',
+          representation: '2'
+        },
+        args: {
+          type: 'array',
+          representation: '[Array]'
+        }
+      })
     })
 
     selfTestsRunner.test('Should handle complex argument types', async () => {

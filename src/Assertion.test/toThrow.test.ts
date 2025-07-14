@@ -37,9 +37,13 @@ export async function toThrowTest() {
 
       const failedTest = testsRunner.state.tests[0]
       const error = failedTest.failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected function to throw, but it did not')
-      selfTestsRunner.expect(error.expected).toBe('error')
-      selfTestsRunner.expect(error.actual).toBe('no error')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to throw, but it did not')
+      selfTestsRunner.expect(error.messageLocals).toEqual({
+        actual: {
+          type: 'function',
+          representation: '[Function]'
+        }
+      })
     })
 
     selfTestsRunner.test('Should fail when value is not a function', async () => {
@@ -54,9 +58,12 @@ export async function toThrowTest() {
 
       const failedTest = testsRunner.state.tests[0]
       const error = failedTest.failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected a function, but got {{actual}}')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to be a function')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        actual: 'not a function'
+        actual: {
+          type: 'string',
+          representation: "'not a function'"
+        }
       })
     })
 
@@ -92,9 +99,20 @@ export async function toThrowTest() {
 
       const failedTest = testsRunner.state.tests[0]
       const error = failedTest.failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected function to throw matching error, but it threw {{actual}}')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to throw {{target}}, but it threw {{error}}')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        actual: 'Something went wrong'
+        actual: {
+          type: 'function',
+          representation: '[Function]'
+        },
+        target: {
+          type: 'string',
+          representation: "'different error'"
+        },
+        error: {
+          type: 'instanceOf',
+          representation: 'Error'
+        }
       })
     })
 
@@ -192,9 +210,16 @@ export async function toThrowTest() {
 
       const failedTest = testsRunner.state.tests[0]
       const error = failedTest.failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected function not to throw, but it threw {{actual}}')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} not to throw, but it threw {{error}}')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        actual: 'Something went wrong'
+        actual: {
+          type: 'function',
+          representation: '[Function]'
+        },
+        error: {
+          type: 'instanceOf',
+          representation: 'Error'
+        }
       })
     })
 
@@ -231,7 +256,17 @@ export async function toThrowTest() {
 
       const failedTest = testsRunner.state.tests[0]
       const error = failedTest.failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected function not to throw matching error, but it did')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} not to throw {{target}}, but it did')
+      selfTestsRunner.expect(error.messageLocals).toEqual({
+        actual: {
+          type: 'function',
+          representation: '[Function]'
+        },
+        target: {
+          type: 'string',
+          representation: "'Specific error'"
+        }
+      })
     })
 
     selfTestsRunner.test('Should handle different error types', async () => {

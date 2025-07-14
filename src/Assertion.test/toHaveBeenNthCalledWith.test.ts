@@ -40,11 +40,20 @@ export async function toHaveBeenNthCalledWithTest() {
 
       const failedTest = testsRunner.state.tests[0]
       const error = failedTest.failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected {{n}}th call to have been called with {{expected}}, but it was called with {{actual}}')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to have been called {{n}}th with {{args}}')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        n: '1',
-        expected: 'Array',
-        actual: 'Array'
+        actual: {
+          type: 'function',
+          representation: '[Function]'
+        },
+        n: {
+          type: 'number',
+          representation: '1'
+        },
+        args: {
+          type: 'array',
+          representation: '[Array]'
+        }
       })
     })
 
@@ -63,10 +72,12 @@ export async function toHaveBeenNthCalledWithTest() {
 
       const failedTest = testsRunner.state.tests[0]
       const error = failedTest.failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected mock function to have been called at least {{expected}} times, but it was called {{actual}} times')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to have been called, but it was not')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        expected: '3',
-        actual: '1'
+        actual: {
+          type: 'function',
+          representation: '[Function]'
+        }
       })
     })
 
@@ -85,7 +96,13 @@ export async function toHaveBeenNthCalledWithTest() {
 
       const failedTest = testsRunner.state.tests[0]
       const error = failedTest.failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('N must be a positive integer')
+      selfTestsRunner.expect(error.message).toBe('Expected {{n}} to be a positive integer')
+      selfTestsRunner.expect(error.messageLocals).toEqual({
+        n: {
+          type: 'number',
+          representation: '0'
+        }
+      })
     })
 
     selfTestsRunner.test('Should fail when n is negative', async () => {
@@ -103,7 +120,13 @@ export async function toHaveBeenNthCalledWithTest() {
 
       const failedTest = testsRunner.state.tests[0]
       const error = failedTest.failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('N must be a positive integer')
+      selfTestsRunner.expect(error.message).toBe('Expected {{n}} to be a positive integer')
+      selfTestsRunner.expect(error.messageLocals).toEqual({
+        n: {
+          type: 'number',
+          representation: '-1'
+        }
+      })
     })
 
     selfTestsRunner.test('Should fail when value is not a mock function', async () => {
@@ -120,9 +143,12 @@ export async function toHaveBeenNthCalledWithTest() {
 
       const failedTest = testsRunner.state.tests[0]
       const error = failedTest.failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected a mock function, but got {{actual}}')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to be a mock function')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        actual: '()=>{}'
+        actual: {
+          type: 'function',
+          representation: '[Function]'
+        }
       })
     })
 
@@ -191,9 +217,20 @@ export async function toHaveBeenNthCalledWithTest() {
 
       const failedTest = testsRunner.state.tests[0]
       const error = failedTest.failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected {{n}}th call not to have been called with given arguments, but it was')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} not to have been called {{n}}th with {{args}}, but it was')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        n: '2'
+        actual: {
+          type: 'function',
+          representation: '[Function]'
+        },
+        n: {
+          type: 'number',
+          representation: '2'
+        },
+        args: {
+          type: 'array',
+          representation: '[Array]'
+        }
       })
     })
 

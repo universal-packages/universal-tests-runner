@@ -62,14 +62,21 @@ export async function toHaveLengthTest() {
 
       selfTestsRunner.expect(testsRunner.isFailed).toBe(true)
       const error = testsRunner.state.tests[0].failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to have length {{expected}}, but got length {{actualLength}}')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to have length of {{target}}, but got length {{actualLength}}')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        expected: '5',
-        actual: 'Array',
-        actualLength: '3'
+        target: {
+          type: 'number',
+          representation: '5'
+        },
+        actual: {
+          type: 'array',
+          representation: '[Array]'
+        },
+        actualLength: {
+          type: 'number',
+          representation: '3'
+        }
       })
-      selfTestsRunner.expect(error.expected).toBe(5)
-      selfTestsRunner.expect(error.actual).toBe(3) // The actual value is the actual length, not the array
     })
 
     selfTestsRunner.test('Should throw error when value has no length property', async () => {
@@ -82,10 +89,13 @@ export async function toHaveLengthTest() {
       await testsRunner.run()
 
       const error = testsRunner.state.tests[0].failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected value to have a length, but it does not')
-      selfTestsRunner.expect(error.messageLocals).toEqual({})
-      selfTestsRunner.expect(error.expected).toBe('value with length property')
-      selfTestsRunner.expect(error.actual).toEqual({})
+      selfTestsRunner.expect(error.message).toBe('Target length {{target}} is not a number')
+      selfTestsRunner.expect(error.messageLocals).toEqual({
+        target: {
+          type: 'number',
+          representation: '0'
+        }
+      })
     })
 
     selfTestsRunner.test('Should handle different types without length property', async () => {
@@ -110,7 +120,7 @@ export async function toHaveLengthTest() {
       // Number test should fail with the expected error message
       const numberTest = tests[0]
       const numberError = numberTest.failureReason as TestError
-      selfTestsRunner.expect(numberError.message).toBe('Expected value to have a length, but it does not')
+      selfTestsRunner.expect(numberError.message).toBe('Target length {{target}} is not a number')
 
       // Null and undefined tests should fail with runtime errors since accessing .length on them throws
       const nullTest = tests[1]
@@ -146,13 +156,17 @@ export async function toHaveLengthTest() {
       await testsRunner.run()
 
       const error = testsRunner.state.tests[0].failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} not to have length {{expected}}, but it did')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} not to have length of {{target}}, but it did')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        expected: '3',
-        actual: 'Array'
+        target: {
+          type: 'number',
+          representation: '3'
+        },
+        actual: {
+          type: 'array',
+          representation: '[Array]'
+        }
       })
-      selfTestsRunner.expect(error.expected).toBe(3)
-      selfTestsRunner.expect(error.actual).toBe(3) // The actual value is the actual length
     })
 
     selfTestsRunner.test('Should handle edge cases', async () => {
@@ -204,7 +218,7 @@ export async function toHaveLengthTest() {
       const tests = testsRunner.state.tests
       tests.forEach((test) => {
         const error = test.failureReason as TestError
-        selfTestsRunner.expect(error.message).toBe('Expected value to have a length, but it does not')
+        selfTestsRunner.expect(error.message).toBe('Target length {{target}} is not a number')
       })
     })
   })

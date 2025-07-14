@@ -33,9 +33,16 @@ export async function toResolveTest() {
 
       const failedTest = testsRunner.state.tests[0]
       const error = failedTest.failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected promise to resolve, but it rejected with {{actual}}')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to resolve, but it rejected with {{error}}')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        actual: 'Failed'
+        actual: {
+          type: 'instanceOf',
+          representation: 'Promise'
+        },
+        error: {
+          type: 'instanceOf',
+          representation: 'Error'
+        }
       })
     })
 
@@ -51,9 +58,12 @@ export async function toResolveTest() {
 
       const failedTest = testsRunner.state.tests[0]
       const error = failedTest.failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected a promise, but got {{actual}}')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to be a promise')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        actual: 'not a promise'
+        actual: {
+          type: 'string',
+          representation: "'not a promise'"
+        }
       })
     })
 
@@ -84,10 +94,16 @@ export async function toResolveTest() {
 
       const failedTest = testsRunner.state.tests[0]
       const error = failedTest.failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected promise to resolve with {{expected}}, but got {{actual}}')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to resolve with {{target}}')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        expected: 'expected value',
-        actual: 'actual value'
+        target: {
+          type: 'string',
+          representation: "'expected value'"
+        },
+        actual: {
+          type: 'instanceOf',
+          representation: 'Promise'
+        }
       })
     })
 
@@ -133,9 +149,12 @@ export async function toResolveTest() {
 
       const failedTest = testsRunner.state.tests[0]
       const error = failedTest.failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected promise to not resolve (reject), but it resolved with {{actual}}')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} not to resolve, but it did')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        actual: 'success'
+        actual: {
+          type: 'instanceOf',
+          representation: 'Promise'
+        }
       })
     })
 
@@ -179,9 +198,16 @@ export async function toResolveTest() {
 
       const failedTest = testsRunner.state.tests[0]
       const error = failedTest.failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected promise not to resolve with {{expected}}, but it resolved with that value')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} not to resolve with {{target}}, but it did')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        expected: 'expected value'
+        target: {
+          type: 'string',
+          representation: "'expected value'"
+        },
+        actual: {
+          type: 'instanceOf',
+          representation: 'Promise'
+        }
       })
     })
 

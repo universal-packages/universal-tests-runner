@@ -34,12 +34,17 @@ export async function toBeUndefinedTest() {
 
       selfTestsRunner.expect(testsRunner.isFailed).toBe(true)
       const error = testsRunner.state.tests[0].failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected value to be undefined, but got {{actual}}')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to be {{target}}')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        actual: '42'
+        actual: {
+          type: 'number',
+          representation: '42'
+        },
+        target: {
+          type: 'undefined',
+          representation: 'undefined'
+        }
       })
-      selfTestsRunner.expect(error.expected).toBe(undefined)
-      selfTestsRunner.expect(error.actual).toBe(42)
     })
 
     selfTestsRunner.test('Should handle different non-undefined types', async () => {
@@ -63,15 +68,24 @@ export async function toBeUndefinedTest() {
 
       // Null test
       const nullError = tests[0].failureReason as TestError
-      selfTestsRunner.expect(nullError.messageLocals.actual).toBe('null')
+      selfTestsRunner.expect(nullError.messageLocals.actual).toEqual({
+        type: 'null',
+        representation: 'null'
+      })
 
       // String test
       const stringError = tests[1].failureReason as TestError
-      selfTestsRunner.expect(stringError.messageLocals.actual).toBe('hello')
+      selfTestsRunner.expect(stringError.messageLocals.actual).toEqual({
+        type: 'string',
+        representation: "'hello'"
+      })
 
       // Boolean test
       const boolError = tests[2].failureReason as TestError
-      selfTestsRunner.expect(boolError.messageLocals.actual).toBe('false')
+      selfTestsRunner.expect(boolError.messageLocals.actual).toEqual({
+        type: 'boolean',
+        representation: 'false'
+      })
     })
 
     selfTestsRunner.test('Should work with not.toBeUndefined for successful negation', async () => {
@@ -102,10 +116,17 @@ export async function toBeUndefinedTest() {
       await testsRunner.run()
 
       const error = testsRunner.state.tests[0].failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected value not to be undefined, but it was')
-      selfTestsRunner.expect(error.messageLocals).toEqual({})
-      selfTestsRunner.expect(error.expected).toBe('not undefined')
-      selfTestsRunner.expect(error.actual).toBe(undefined)
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} not to be {{target}}, but it was')
+      selfTestsRunner.expect(error.messageLocals).toEqual({
+        actual: {
+          type: 'undefined',
+          representation: 'undefined'
+        },
+        target: {
+          type: 'undefined',
+          representation: 'undefined'
+        }
+      })
     })
 
     selfTestsRunner.test('Should distinguish undefined from other falsy values', async () => {

@@ -74,12 +74,17 @@ export async function toHavePropertyTest() {
 
       selfTestsRunner.expect(testsRunner.isFailed).toBe(true)
       const error = testsRunner.state.tests[0].failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected object to have property {{path}}, but it did not')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to have property in path {{path}}, but it did not')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        path: 'age'
+        path: {
+          type: 'string',
+          representation: "'age'"
+        },
+        actual: {
+          type: 'instanceOf',
+          representation: 'Object'
+        }
       })
-      selfTestsRunner.expect(error.expected).toBe('property age')
-      selfTestsRunner.expect(error.actual).toEqual({ name: 'John' })
     })
 
     selfTestsRunner.test('Should fail when property has wrong value', async () => {
@@ -93,11 +98,20 @@ export async function toHavePropertyTest() {
       await testsRunner.run()
 
       const error = testsRunner.state.tests[0].failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected property {{path}} to equal {{expected}}, but got {{actual}}')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to have property in path {{path}} equal to {{target}}')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        path: 'age',
-        expected: '25',
-        actual: '30'
+        path: {
+          type: 'string',
+          representation: "'age'"
+        },
+        target: {
+          type: 'number',
+          representation: '25'
+        },
+        actual: {
+          type: 'instanceOf',
+          representation: 'Object'
+        }
       })
     })
 
@@ -112,9 +126,16 @@ export async function toHavePropertyTest() {
       await testsRunner.run()
 
       const error = testsRunner.state.tests[0].failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected object to have property {{path}}, but it did not')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to have property in path {{path}}, but it did not')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        path: 'user.profile.name'
+        path: {
+          type: 'string',
+          representation: "'user.profile.name'"
+        },
+        actual: {
+          type: 'instanceOf',
+          representation: 'Object'
+        }
       })
     })
 
@@ -130,7 +151,7 @@ export async function toHavePropertyTest() {
       // String property check actually fails in this implementation
       selfTestsRunner.expect(testsRunner.isFailed).toBe(true)
       const error = testsRunner.state.tests[0].failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected object to have property {{path}}, but it did not')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to have property in path {{path}}, but it did not')
     })
 
     selfTestsRunner.test('Should handle different non-object types', async () => {
@@ -155,7 +176,7 @@ export async function toHavePropertyTest() {
       // All should fail with property not found error
       tests.forEach((test) => {
         const error = test.failureReason as TestError
-        selfTestsRunner.expect(error.message).toBe('Expected object to have property {{path}}, but it did not')
+        selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to have property in path {{path}}, but it did not')
       })
     })
 
@@ -185,9 +206,16 @@ export async function toHavePropertyTest() {
       await testsRunner.run()
 
       const error = testsRunner.state.tests[0].failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected object not to have property {{path}}, but it did')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} not to have property in path {{path}}, but it did')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        path: 'name'
+        path: {
+          type: 'string',
+          representation: "'name'"
+        },
+        actual: {
+          type: 'instanceOf',
+          representation: 'Object'
+        }
       })
     })
 
@@ -202,10 +230,20 @@ export async function toHavePropertyTest() {
       await testsRunner.run()
 
       const error = testsRunner.state.tests[0].failureReason as TestError
-      selfTestsRunner.expect(error.message).toBe('Expected property {{path}} not to equal {{expected}}, but it did')
+      selfTestsRunner.expect(error.message).toBe('Expected {{actual}} not to have property in path {{path}} equal to {{target}}, but it did')
       selfTestsRunner.expect(error.messageLocals).toEqual({
-        path: 'age',
-        expected: '30'
+        path: {
+          type: 'string',
+          representation: "'age'"
+        },
+        target: {
+          type: 'number',
+          representation: '30'
+        },
+        actual: {
+          type: 'instanceOf',
+          representation: 'Object'
+        }
       })
     })
 
