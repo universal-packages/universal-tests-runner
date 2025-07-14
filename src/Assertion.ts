@@ -25,8 +25,8 @@ export class Assertion {
         throw new TestError({
           message: `Expected {{actual}} not to be {{target}}, but it was`,
           messageLocals: {
-            target: this.getMessageLocal(target),
-            actual: this.getMessageLocal(this.value)
+            actual: this.getMessageLocal(this.value),
+            target: this.getMessageLocal(target)
           }
         })
     } else {
@@ -34,8 +34,8 @@ export class Assertion {
         throw new TestError({
           message: `Expected {{actual}} to be {{target}}`,
           messageLocals: {
-            target: this.getMessageLocal(target),
-            actual: this.getMessageLocal(this.value)
+            actual: this.getMessageLocal(this.value),
+            target: this.getMessageLocal(target)
           }
         })
     }
@@ -49,8 +49,8 @@ export class Assertion {
         throw new TestError({
           message: 'Expected {{actual}} not to equal {{target}}, but it did',
           messageLocals: {
-            target: this.getMessageLocal(target),
-            actual: this.getMessageLocal(this.value)
+            actual: this.getMessageLocal(this.value),
+            target: this.getMessageLocal(target)
           },
           difference
         })
@@ -60,8 +60,8 @@ export class Assertion {
         throw new TestError({
           message: 'Expected {{actual}} to equal {{target}}',
           messageLocals: {
-            target: this.getMessageLocal(target),
-            actual: this.getMessageLocal(this.value)
+            actual: this.getMessageLocal(this.value),
+            target: this.getMessageLocal(target)
           },
           difference
         })
@@ -193,8 +193,8 @@ export class Assertion {
         throw new TestError({
           message: 'Expected {{actual}} not to contain {{target}}, but it did',
           messageLocals: {
-            target: this.getMessageLocal(item),
-            actual: this.getMessageLocal(this.value)
+            actual: this.getMessageLocal(this.value),
+            target: this.getMessageLocal(item)
           }
         })
     } else {
@@ -202,8 +202,8 @@ export class Assertion {
         throw new TestError({
           message: 'Expected {{actual}} to contain {{target}}',
           messageLocals: {
-            target: this.getMessageLocal(item),
-            actual: this.getMessageLocal(this.value)
+            actual: this.getMessageLocal(this.value),
+            target: this.getMessageLocal(item)
           }
         })
     }
@@ -233,8 +233,8 @@ export class Assertion {
         throw new TestError({
           message: 'Expected {{actual}} to have length of {{target}}, but got length {{actualLength}}',
           messageLocals: {
-            target: this.getMessageLocal(length),
             actual: this.getMessageLocal(this.value),
+            target: this.getMessageLocal(length),
             actualLength: this.getMessageLocal(this.value.length)
           }
         })
@@ -266,8 +266,8 @@ export class Assertion {
         throw new TestError({
           message: 'Expected {{actual}} not to have property in path {{path}}, but it did',
           messageLocals: {
-            path: this.getMessageLocal(path),
-            actual: this.getMessageLocal(this.value)
+            actual: this.getMessageLocal(this.value),
+            path: this.getMessageLocal(path)
           }
         })
       }
@@ -275,9 +275,9 @@ export class Assertion {
         throw new TestError({
           message: 'Expected {{actual}} not to have property in path {{path}} equal to {{target}}, but it did',
           messageLocals: {
+            actual: this.getMessageLocal(this.value),
             path: this.getMessageLocal(path),
-            target: this.getMessageLocal(value),
-            actual: this.getMessageLocal(this.value)
+            target: this.getMessageLocal(value)
           }
         })
       }
@@ -286,8 +286,8 @@ export class Assertion {
         throw new TestError({
           message: 'Expected {{actual}} to have property in path {{path}}, but it did not',
           messageLocals: {
-            path: this.getMessageLocal(path),
-            actual: this.getMessageLocal(this.value)
+            actual: this.getMessageLocal(this.value),
+            path: this.getMessageLocal(path)
           }
         })
       }
@@ -295,9 +295,9 @@ export class Assertion {
         throw new TestError({
           message: 'Expected {{actual}} to have property in path {{path}} equal to {{target}}',
           messageLocals: {
+            actual: this.getMessageLocal(this.value),
             path: this.getMessageLocal(path),
-            target: this.getMessageLocal(value),
-            actual: this.getMessageLocal(this.value)
+            target: this.getMessageLocal(value)
           },
           difference: targetPropertyValueDiff
         })
@@ -320,8 +320,8 @@ export class Assertion {
         throw new TestError({
           message: 'Expected {{actual}} not to be greater than {{target}}, but it was',
           messageLocals: {
-            target: this.getMessageLocal(number),
-            actual: this.getMessageLocal(this.value)
+            actual: this.getMessageLocal(this.value),
+            target: this.getMessageLocal(number)
           }
         })
     } else {
@@ -329,8 +329,8 @@ export class Assertion {
         throw new TestError({
           message: 'Expected {{actual}} to be greater than {{target}}',
           messageLocals: {
-            target: this.getMessageLocal(number),
-            actual: this.getMessageLocal(this.value)
+            actual: this.getMessageLocal(this.value),
+            target: this.getMessageLocal(number)
           }
         })
     }
@@ -351,8 +351,8 @@ export class Assertion {
         throw new TestError({
           message: 'Expected {{actual}} not to be less than {{target}}, but it was',
           messageLocals: {
-            target: this.getMessageLocal(number),
-            actual: this.getMessageLocal(this.value)
+            actual: this.getMessageLocal(this.value),
+            target: this.getMessageLocal(number)
           }
         })
     } else {
@@ -360,8 +360,8 @@ export class Assertion {
         throw new TestError({
           message: 'Expected {{actual}} to be less than {{target}}',
           messageLocals: {
-            target: this.getMessageLocal(number),
-            actual: this.getMessageLocal(this.value)
+            actual: this.getMessageLocal(this.value),
+            target: this.getMessageLocal(number)
           }
         })
     }
@@ -384,8 +384,8 @@ export class Assertion {
         throw new TestError({
           message: 'Expected {{actual}} not to match {{target}}, but it did',
           messageLocals: {
-            target: this.getMessageLocal(regex),
-            actual: this.getMessageLocal(this.value)
+            actual: this.getMessageLocal(this.value),
+            target: this.getMessageLocal(regex)
           }
         })
     } else {
@@ -393,8 +393,8 @@ export class Assertion {
         throw new TestError({
           message: 'Expected {{actual}} to match {{target}}',
           messageLocals: {
-            target: this.getMessageLocal(regex),
-            actual: this.getMessageLocal(this.value)
+            actual: this.getMessageLocal(this.value),
+            target: this.getMessageLocal(regex)
           }
         })
     }
@@ -488,8 +488,8 @@ export class Assertion {
         throw new TestError({
           message: 'Expected {{actual}} not to be instance of {{target}}, but it was',
           messageLocals: {
-            target: this.getMessageLocal(target),
-            actual: this.getMessageLocal(this.value)
+            actual: this.getMessageLocal(this.value),
+            target: this.getMessageLocal(target)
           }
         })
     } else {
@@ -497,8 +497,8 @@ export class Assertion {
         throw new TestError({
           message: 'Expected {{actual}} to be instance of {{target}}',
           messageLocals: {
-            target: this.getMessageLocal(target),
-            actual: this.getMessageLocal(this.value)
+            actual: this.getMessageLocal(this.value),
+            target: this.getMessageLocal(target)
           }
         })
     }
@@ -523,8 +523,8 @@ export class Assertion {
         throw new TestError({
           message: 'Expected {{actual}} not to be close to {{target}} (precision: {{precision}}), but it was',
           messageLocals: {
-            target: this.getMessageLocal(number),
             actual: this.getMessageLocal(this.value),
+            target: this.getMessageLocal(number),
             precision: this.getMessageLocal(precision)
           }
         })
@@ -533,8 +533,8 @@ export class Assertion {
         throw new TestError({
           message: 'Expected {{actual}} to be close to {{target}} (precision: {{precision}})',
           messageLocals: {
-            target: this.getMessageLocal(number),
             actual: this.getMessageLocal(this.value),
+            target: this.getMessageLocal(number),
             precision: this.getMessageLocal(precision)
           }
         })
@@ -564,8 +564,8 @@ export class Assertion {
             throw new TestError({
               message: 'Expected {{actual}} not to resolve with {{target}}, but it did',
               messageLocals: {
-                target: this.getMessageLocal(target),
-                actual: this.getMessageLocal(this.value)
+                actual: this.getMessageLocal(this.value),
+                target: this.getMessageLocal(target)
               },
               difference
             })
@@ -587,8 +587,8 @@ export class Assertion {
           throw new TestError({
             message: 'Expected {{actual}} to resolve with {{target}}',
             messageLocals: {
-              target: this.getMessageLocal(target),
-              actual: this.getMessageLocal(this.value)
+              actual: this.getMessageLocal(this.value),
+              target: this.getMessageLocal(target)
             },
             difference
           })
@@ -667,8 +667,8 @@ export class Assertion {
             throw new TestError({
               message: 'Expected {{actual}} not to reject with {{target}}, but it did',
               messageLocals: {
-                target: this.getMessageLocal(target),
-                actual: this.getMessageLocal(this.value)
+                actual: this.getMessageLocal(this.value),
+                target: this.getMessageLocal(target)
               }
             })
           }
@@ -691,8 +691,8 @@ export class Assertion {
             throw new TestError({
               message: 'Expected {{actual}} to reject with {{target}}, but it rejected with {{error}}',
               messageLocals: {
-                target: this.getMessageLocal(target),
                 actual: this.getMessageLocal(this.value),
+                target: this.getMessageLocal(target),
                 error: this.getMessageLocal(error)
               }
             })
@@ -717,8 +717,8 @@ export class Assertion {
         throw new TestError({
           message: 'Expected {{actual}} not to be greater than or equal to {{target}}, but it was',
           messageLocals: {
-            target: this.getMessageLocal(number),
-            actual: this.getMessageLocal(this.value)
+            actual: this.getMessageLocal(this.value),
+            target: this.getMessageLocal(number)
           }
         })
     } else {
@@ -726,8 +726,8 @@ export class Assertion {
         throw new TestError({
           message: 'Expected {{actual}} to be greater than or equal to {{target}}',
           messageLocals: {
-            target: this.getMessageLocal(number),
-            actual: this.getMessageLocal(this.value)
+            actual: this.getMessageLocal(this.value),
+            target: this.getMessageLocal(number)
           }
         })
     }
@@ -748,8 +748,8 @@ export class Assertion {
         throw new TestError({
           message: 'Expected {{actual}} not to be less than or equal to {{target}}, but it was',
           messageLocals: {
-            target: this.getMessageLocal(number),
-            actual: this.getMessageLocal(this.value)
+            actual: this.getMessageLocal(this.value),
+            target: this.getMessageLocal(number)
           }
         })
     } else {
@@ -757,8 +757,8 @@ export class Assertion {
         throw new TestError({
           message: 'Expected {{actual}} to be less than or equal to {{target}}',
           messageLocals: {
-            target: this.getMessageLocal(number),
-            actual: this.getMessageLocal(this.value)
+            actual: this.getMessageLocal(this.value),
+            target: this.getMessageLocal(number)
           }
         })
     }
@@ -772,8 +772,8 @@ export class Assertion {
         throw new TestError({
           message: 'Expected {{actual}} not to be {{target}}, but it was',
           messageLocals: {
-            target: this.getMessageLocal(NaN),
-            actual: this.getMessageLocal(this.value)
+            actual: this.getMessageLocal(this.value),
+            target: this.getMessageLocal(NaN)
           }
         })
     } else {
@@ -781,8 +781,8 @@ export class Assertion {
         throw new TestError({
           message: 'Expected {{actual}} to be {{target}}',
           messageLocals: {
-            target: this.getMessageLocal(NaN),
-            actual: this.getMessageLocal(this.value)
+            actual: this.getMessageLocal(this.value),
+            target: this.getMessageLocal(NaN)
           }
         })
     }
@@ -807,8 +807,8 @@ export class Assertion {
         throw new TestError({
           message: 'Expected {{actual}} not to contain an item equal to {{target}}, but it did',
           messageLocals: {
-            target: this.getMessageLocal(item),
-            actual: this.getMessageLocal(this.value)
+            actual: this.getMessageLocal(this.value),
+            target: this.getMessageLocal(item)
           }
         })
     } else {
@@ -816,8 +816,8 @@ export class Assertion {
         throw new TestError({
           message: 'Expected {{actual}} to contain an item equal to {{target}}',
           messageLocals: {
-            target: this.getMessageLocal(item),
-            actual: this.getMessageLocal(this.value)
+            actual: this.getMessageLocal(this.value),
+            target: this.getMessageLocal(item)
           }
         })
     }
@@ -879,8 +879,8 @@ export class Assertion {
         throw new TestError({
           message: 'Expected {{actual}} not to match {{target}}',
           messageLocals: {
-            target: this.getMessageLocal(target),
-            actual: this.getMessageLocal(this.value)
+            actual: this.getMessageLocal(this.value),
+            target: this.getMessageLocal(target)
           },
           difference: differenceWithoutAdded
         })
@@ -890,8 +890,8 @@ export class Assertion {
         throw new TestError({
           message: 'Expected {{actual}} to match {{target}}',
           messageLocals: {
-            target: this.getMessageLocal(target),
-            actual: this.getMessageLocal(this.value)
+            actual: this.getMessageLocal(this.value),
+            target: this.getMessageLocal(target)
           },
           difference: differenceWithoutAdded
         })
@@ -1000,8 +1000,8 @@ export class Assertion {
         throw new TestError({
           message: 'Expected {{actual}} to have been called {{target}} times, but it was called {{count}} times',
           messageLocals: {
+            actual: this.getMessageLocal(this.value),
             target: this.getMessageLocal(targetCount),
-            actual: this.getMessageLocal(callCount),
             count: this.getMessageLocal(callCount)
           }
         })

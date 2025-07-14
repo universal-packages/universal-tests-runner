@@ -67,13 +67,13 @@ export async function toHaveBeenCalledTimesTest() {
       const error = failedTest.failureReason as TestError
       selfTestsRunner.expect(error.message).toBe('Expected {{actual}} to have been called {{target}} times, but it was called {{count}} times')
       selfTestsRunner.expect(error.messageLocals).toEqual({
+        actual: {
+          type: 'function',
+          representation: '[Function]'
+        },
         target: {
           type: 'number',
           representation: '3'
-        },
-        actual: {
-          type: 'number',
-          representation: '2'
         },
         count: {
           type: 'number',
