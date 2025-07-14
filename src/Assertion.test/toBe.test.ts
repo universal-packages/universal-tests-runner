@@ -437,8 +437,8 @@ export async function toBeTest() {
 
       // Symbol test
       const symbolError = tests[1].failureReason as TestError
-      selfTestsRunner.expect(symbolError.messageLocals.actual.representation).toBe('[Object]')
-      selfTestsRunner.expect(symbolError.messageLocals.target.representation).toBe('[Object]')
+      selfTestsRunner.expect(symbolError.messageLocals.actual.representation).toBe('Symbol(test)')
+      selfTestsRunner.expect(symbolError.messageLocals.target.representation).toBe('Symbol(test)')
     })
   })
 

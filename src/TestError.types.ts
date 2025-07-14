@@ -1,6 +1,6 @@
 import { DiffResult } from './diff.types'
 
-export type ValueType = 'string' | 'number' | 'boolean' | 'null' | 'undefined' | 'object' | 'array' | 'function' | 'instanceOf' | 'asymmetric-assertion'
+export type ValueType = 'string' | 'number' | 'boolean' | 'null' | 'undefined' | 'object' | 'array' | 'function' | 'instanceOf' | 'asymmetric-assertion' | 'symbol'
 
 export interface MessageLocal {
   representation: string

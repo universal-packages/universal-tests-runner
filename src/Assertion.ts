@@ -1212,6 +1212,11 @@ export class Assertion {
           type: 'undefined',
           representation: 'undefined'
         }
+      case 'symbol':
+        return {
+          type: 'symbol',
+          representation: value.toString()
+        }
       default:
         return {
           type: 'object',
