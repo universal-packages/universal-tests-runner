@@ -1217,6 +1217,11 @@ export class Assertion {
           type: 'symbol',
           representation: value.toString()
         }
+      case 'bigint':
+        return {
+          type: 'bigint',
+          representation: `${value}n`
+        }
       default:
         return {
           type: 'object',
