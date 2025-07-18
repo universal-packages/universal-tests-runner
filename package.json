@@ -19,7 +19,7 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@universal-packages/base-runner": "^1.8.1"
+    "@universal-packages/base-runner": "^1.9.9"
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",
